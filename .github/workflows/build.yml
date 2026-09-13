@@ -11,6 +11,10 @@ on:
         description: 'Run the package test suite during the build'
         type: boolean
         default: true
+      runner:
+        description: 'runs-on label — ubuntu-latest, or a Blacksmith label (e.g. blacksmith-16vcpu-ubuntu-2404) once the Blacksmith app is installed on the org'
+        required: true
+        default: 'ubuntu-latest'
 
 permissions:
   contents: write
@@ -22,7 +26,7 @@ concurrency:
 jobs:
   build:
     name: Rebuild sid kicad for trixie and publish release
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner }}
     timeout-minutes: 330
     container:
       image: debian:trixie
