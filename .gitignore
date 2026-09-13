@@ -1,0 +1,11 @@
+# CI/local build artifacts
+/*.deb
+/*.dsc
+/*.tar.xz
+/*.tar.gz
+/*.changes
+/*.buildinfo
+/src/
+/indep/
+/release-notes.md
+/SHA256SUMS
