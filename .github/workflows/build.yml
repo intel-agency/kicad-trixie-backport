@@ -66,7 +66,11 @@ jobs:
       - name: Re-version as a local trixie backport
         run: |
           set -euxo pipefail
-          LOCAL_VERSION="$(printf '%s\n' "$SOURCE_VERSION" | sed -E 's/-[^-]+$/-0~local1/')"
+          # '.local1', not '~local1': the build toolchain pins same-source deps at the bare
+          # upstream version (kicad (>= 10.0.6+dfsg)) and '~' sorts below end-of-string,
+          # so a '~local1' revision sorts BELOW that pin and apt cannot solve the install.
+          # '.local1' sorts above the bare upstream version and still below any '-1…' revision.
+          LOCAL_VERSION="$(printf '%s\n' "$SOURCE_VERSION" | sed -E 's/-[^-]+$/-0.local1/')"
           FUTURE_BPO="$(printf '%s\n' "$SOURCE_VERSION" | sed -E 's/-[^-]+$/-1~bpo13+1/')"
           cd src
           dch -b --newversion "$LOCAL_VERSION" --distribution trixie --force-distribution \
@@ -80,6 +84,11 @@ jobs:
           # …but stay below a future official same-upstream backport
           dpkg --compare-versions "$LOCAL_VERSION" lt "$FUTURE_BPO" \
             || { echo 'FAIL: local version would outrank an official backport'; exit 1; }
+          # …and above the bare upstream version — the trixie toolchain emits
+          # same-source pins like 'kicad (>= <upstream>)' that a lower-sorting
+          # local revision (e.g. one containing '~') makes unsatisfiable
+          dpkg --compare-versions "$LOCAL_VERSION" gt "${SOURCE_VERSION%-*}" \
+            || { echo 'FAIL: local version does not exceed the bare upstream version'; exit 1; }
 
       - name: Build binary packages
         run: |

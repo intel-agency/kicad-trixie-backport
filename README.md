@@ -32,7 +32,7 @@ What you get:
 ## Version policy
 
 Rebuilds are re-versioned to sort **below** a future official backport (e.g. local
-`10.0.6+dfsg-0~local1` < official `10.0.6+dfsg-1~bpo13+1`), while remaining above everything in
+`10.0.6+dfsg-0.local1` < official `10.0.6+dfsg-1~bpo13+1`), while remaining above everything in
 trixie and trixie-backports. When Debian publishes an official KiCad 10 backport, `apt upgrade`
 moves you onto it automatically — this repo's packages step aside.
 
