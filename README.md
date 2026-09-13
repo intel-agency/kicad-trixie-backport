@@ -41,7 +41,8 @@ moves you onto it automatically — this repo's packages step aside.
 Actions tab → **build** → *Run workflow*. Inputs:
 
 - `source_version` — the Debian sid source version to rebuild (default: the latest tested)
-- `run_tests` — run the package test suite during the build (default: on)
+- `run_tests` — run the package test suite during the build (default: **off** — enable for release-quality builds; the suite is a large share of the build's runner minutes)
+- `runner` — `ubuntu-latest` (free for public repos, slower) or a Blacksmith label such as `blacksmith-16vcpu-ubuntu-2404` when speed matters
 
 The workflow runs in a `debian:trixie` container: build dependencies resolve **only** from trixie
 (a temporary sid entry is used exclusively for fetch-only `apt-get download` of the arch:all data

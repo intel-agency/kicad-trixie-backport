@@ -8,9 +8,9 @@ on:
         required: true
         default: '10.0.6+dfsg-1'
       run_tests:
-        description: 'Run the package test suite during the build'
+        description: 'Run the package test suite during the build (enable for release-quality builds — the suite costs a large share of the runner minutes)'
         type: boolean
-        default: true
+        default: false
       runner:
         description: 'runs-on label — ubuntu-latest, or a Blacksmith label (e.g. blacksmith-16vcpu-ubuntu-2404) once the Blacksmith app is installed on the org'
         required: true
