@@ -1,0 +1,17 @@
+name: probe
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  blacksmith:
+    name: Verify Blacksmith runner pickup
+    runs-on: blacksmith-2vcpu-ubuntu-2404
+    timeout-minutes: 5
+    steps:
+      - name: Report runner environment
+        run: |
+          set -eux
+          uname -a
+          echo "cores: $(nproc)"
+          df -h / | tail -1
