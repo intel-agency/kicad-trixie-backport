@@ -38,7 +38,7 @@ jobs:
           set -eux
           apt-get update -qq
           env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-            ca-certificates curl jq xz-utils debian-keyring devscripts \
+            build-essential ca-certificates curl jq xz-utils debian-keyring devscripts \
             chrpath cmake debhelper dh-python dpkg-dev gettext git imagemagick \
             libboost-date-time-dev libboost-dev libboost-filesystem-dev libboost-iostreams-dev \
             libboost-locale-dev libboost-program-options-dev libboost-regex-dev libboost-test-dev \
@@ -82,7 +82,9 @@ jobs:
           set -eux
           if [ "$RUN_TESTS" != "true" ]; then export DEB_BUILD_OPTIONS="nocheck"; fi
           cd src
-          dpkg-buildpackage -b -us -uc -j"$(nproc)"
+          # -B: arch-dependent binaries only — arch:all packages come verbatim from sid,
+          # and Build-Depends-Indep (the whole texlive/dblatex doc toolchain) is not needed
+          dpkg-buildpackage -B -us -uc -j"$(nproc)"
           cd ..
           ls -lh ./*.deb
 
