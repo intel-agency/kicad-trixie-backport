@@ -113,7 +113,8 @@ jobs:
         run: |
           set -euxo pipefail
           # git refs cannot contain '~' — sanitize only the tag; the .deb version keeps ~local1
-          TAG="v${LOCAL_VERSION//\~/-}"
+          # (POSIX only: container steps run under dash, which rejects ${var//} substitutions)
+          TAG="v$(printf '%s' "$LOCAL_VERSION" | tr '~' '-')"
           SRC_URL="$POOL_BASE/kicad_${SOURCE_VERSION}.dsc"
           API="https://api.github.com/repos/$GITHUB_REPOSITORY"
           {
