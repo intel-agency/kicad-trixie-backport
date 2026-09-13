@@ -77,4 +77,5 @@ fi
 uploads=$(grep -c 'uploads.github.com' "$CURL_LOG")
 [ "$uploads" -eq 7 ]   # 1 amd64 kicad + 5 arch:all + SHA256SUMS
 [ -s "$T/work/release-notes.md" ]
+grep -q 'kicad_10.0.6+dfsg-0\.local1_amd64.deb' "$T/work/SHA256SUMS"  # sums use download names
 echo 'workflow script harness: PASS'

@@ -165,6 +165,9 @@ jobs:
               "$API/releases" \
               -d "$RELEASE_JSON" | jq -r .id)
           fi
+          # GitHub asset storage rewrites '~' to '.' in downloaded filenames —
+          # match SHA256SUMS entries to the names users actually receive
+          sed -i 's/~/./' SHA256SUMS
           for f in $(ls ./*.deb | grep -v -- '-dbgsym_') ./SHA256SUMS; do
             n=$(basename "$f" | jq -Rr @uri)
             curl -sS --fail-with-body -X POST \
