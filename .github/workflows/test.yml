@@ -1,0 +1,26 @@
+name: test
+
+on:
+  push:
+    paths:
+      - '.github/workflows/build.yml'
+      - '.github/workflows/test.yml'
+      - 'scripts/**'
+  workflow_dispatch: {}
+
+jobs:
+  scripts:
+    name: Validate workflow scripts (dash + stubbed publish)
+    runs-on: ubuntu-latest
+    container:
+      image: debian:trixie
+    steps:
+      - name: Install harness dependencies
+        run: |
+          set -eux
+          apt-get update -qq
+          env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            nodejs git ca-certificates curl jq python3 python3-yaml
+      - uses: actions/checkout@v4
+      - name: Run script validation harness
+        run: sh scripts/test-workflow-scripts.sh

@@ -159,7 +159,7 @@ jobs:
           # reuse the release if this tag was already published (e.g. after a re-run)
           RELEASE_ID=$(curl -fsS "$API/releases/tags/$TAG" | jq -r '.id // empty') || RELEASE_ID=""
           if [ -z "$RELEASE_ID" ]; then
-            RELEASE_ID=$(curl -fsS --fail-with-body -X POST \
+            RELEASE_ID=$(curl -sS --fail-with-body -X POST \
               -H "Authorization: Bearer $GITHUB_TOKEN" \
               -H "Accept: application/vnd.github+json" \
               "$API/releases" \
@@ -167,7 +167,7 @@ jobs:
           fi
           for f in $(ls ./*.deb | grep -v -- '-dbgsym_') ./SHA256SUMS; do
             n=$(basename "$f" | jq -Rr @uri)
-            curl -fsS --fail-with-body -X POST \
+            curl -sS --fail-with-body -X POST \
               -H "Authorization: Bearer $GITHUB_TOKEN" \
               -H "Content-Type: application/octet-stream" \
               --data-binary "@$f" \
